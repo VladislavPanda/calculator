@@ -2,7 +2,7 @@ $(document).ready(function() {
     $('form').submit(function(e) {
         e.preventDefault(); // Отмена действий браузера по умолчанию
 
-        // Отправляем данные на сервер ajax-запросом
+        //  Отправляем данные на сервер ajax-запросом
         $.ajax({
             type: "POST",
             url: 'calculator.php',

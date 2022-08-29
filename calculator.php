@@ -4,8 +4,4 @@ require_once 'operations.php'; // Подключение файла с масс�
 
 $statement = $_POST['statement'];
 
-/*echo '<pre>';
-var_dump($statement);
-echo '</pre>';*/
-
 echo json_encode(['result' => $statement]);
