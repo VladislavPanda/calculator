@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=`, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="script.js" type="text/javascript"></script>
     <title>Калькулятор</title>
 </head>
 <body>
@@ -16,26 +17,5 @@
     </br>
     
     <span id="result"></span>
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('form').submit(function(e) {
-                e.preventDefault(); // Отмена действий браузера по умолчанию
-
-                // Отправляем данные на сервер ajax-запросом
-                $.ajax({
-                    type: "POST",
-                    url: 'calculator.php',
-                    data: $(this).serialize(),
-                    success: function(response)
-                    {
-                        var jsonData = JSON.parse(response); // Принимаем ответ от сервера
-
-                        document.getElementById('result').innerHTML = 'Результат вычисления: ' + jsonData.result;
-                   }
-               });
-             });
-        });
-    </script>
 </body>
 </html>
