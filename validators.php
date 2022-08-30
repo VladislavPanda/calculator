@@ -6,7 +6,7 @@ function validateAcceptableSymbols($statement){
     $cyrrilicSymbolsFlag = preg_match("/[\p{Cyrillic}]/u", $statement); // Проверка на кириллические буквенные символы
     
     if($latinSymbolsFlag == 1 || $cyrrilicSymbolsFlag == 1){ // Если найдены латинские или кириллические буквенные символы в строке выражения - возвращается ошибка 
-        echo json_encode(['result' => 'Ошибка. В строке содержатся недопустимые символы (латицина или кириллица)'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        echo json_encode(['result' => 'Ошибка! В строке содержатся недопустимые символы (латиница или кириллица)'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         exit;
     }
 }
@@ -17,12 +17,19 @@ function validateArithmeticSymbolsExistance($statement, $operations){
 
     for($i = 0; $i < sizeof($operations); $i++) if(strpos($statement, $operations[$i]) !== false) $flag = true; // Если в строке найден арифметический символ, значение флага меняется на истину
     if($flag === false){ // Если нет арифметических символов - возращается ошибка
-        echo json_encode(['result' => 'Ошибка. В строке отсутствуют арифметические символы'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        echo json_encode(['result' => 'Ошибка! В строке отсутствуют арифметические символы'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         exit;
     }
 }
 
 // Функция проверки строки выражения: следуют ли арифметические символы друг за другом
 function validateSequentialOperators($statement, $operations){
+    $statement = str_split($statement);
 
+    for($i = 0; $i < sizeof($statement); $i++){
+        if(in_array($statement[$i], $operations) && in_array($statement[$i+1], $operations)){
+            echo json_encode(['result' => 'Ошибка! Обнаружен повтор арифметических символов'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+            exit;
+        }
+    }
 }
