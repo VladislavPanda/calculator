@@ -6,5 +6,6 @@ require_once 'validators.php'; // Подключение файлы методо
 $statement = $_POST['statement'];
 
 validateAcceptableSymbols($statement); // Функция проверки на допустимые символы
+validateArithmeticSymbolsExistance($statement, $operations);
 
 echo json_encode(['result' => $statement], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
