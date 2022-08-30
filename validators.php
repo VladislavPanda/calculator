@@ -1,12 +1,19 @@
 <?php
+// Файл функций-валидаторов введённой строки выражения
 
 // Функция проверки - есть ли в строке буквенные символы (латинские или кирилличиские). Если да, выбрасывается ошибка
-function validateAcceptableSymbols($statement, &$errors){
-    $latinSymbolsFlag = preg_match("/[a-z]/i", $statement); // Проверка на латинские буквенные символы
-    $cyrrilicSymbolsFlag = preg_match("/[\p{Cyrillic}]/u", $statement); // Проверка на кириллические буквенные символы
+function validateAcceptableSymbols($statement, $operations, &$errors){
+    $statement = str_split($statement);
+    $statementLength = sizeof($statement);
 
-    if($latinSymbolsFlag == 1) $errors[] = 'Ошибка! В строке содержатся недопустимые символы (латиница)';
-    if($cyrrilicSymbolsFlag == 1) $errors[] = 'Ошибка! В строке содержатся недопустимые символы (кириллица)';
+    for($i = 0; $i < $statementLength; $i++){
+        if($statement[$i] == '.') continue;
+
+        if(!in_array($statement[$i], $operations) && !preg_match('~[0-9]+~', $statement[$i])){
+            $errors[] = 'Ошибка! Обнаружены недопустимые символы';
+            break;
+        }
+    }
 }
 
 // Функция проверки присутствия арифметических символов в строке выражения
@@ -17,7 +24,7 @@ function validateArithmeticSymbolsExistance($statement, $operations, &$errors){
     if($flag === false) $errors[] = 'Ошибка! В строке отсутствуют арифметические символы'; // Если нет арифметических символов - возращается ошибка
 }
 
-// Функция проверки строки выражения: следуют ли арифметические символы друг за другом
+// Функция проверки корректности расположения арифметических символов
 function validateSequentialOperators($statement, $operations, &$errors){
     $statement = str_split($statement);
 
@@ -25,7 +32,9 @@ function validateSequentialOperators($statement, $operations, &$errors){
         $errors[] = 'Ошибка! Арифметические символы не могут располагаться в начале или конце строки';
 
     for($i = 0; $i < sizeof($statement); $i++){
-        if(in_array($statement[$i], $operations) && in_array($statement[$i+1], $operations))
+        if(in_array($statement[$i], $operations) && in_array($statement[$i+1], $operations)){ // Если следующий символ после найденного арифметического также арифметический - выбрасываем ошибку 
             $errors[] = 'Ошибка! Обнаружен повтор арифметических символов';
+            break;
+        }
     }
 }
