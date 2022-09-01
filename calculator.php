@@ -10,7 +10,9 @@ $errors = []; // Массив ошибок
 validateAcceptableSymbols($statement, $operations, $errors); // Функция проверки на допустимые символы
 validateArithmeticSymbolsExistance($statement, $operations, $errors); // Функция проверки на наличие в строке выражения арифметических символов и их следования одного за другим
 validateSequentialOperators($statement, $operations, $errors); // Функция проверки корректности расположения арифметических символов
+validateDotPositions($statement, $operations, $errors); // Функция проверки корректности расположения символа '.'
 if(!preg_match('~[0-9]+~', $statement)) $errors[] = 'Ошибка! В строке отсутствуют цифры'; // Проверка присутствия в строке выражения чисел
+
 
 print_r($errors);
 
