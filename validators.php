@@ -7,6 +7,8 @@ function validateAcceptableSymbols($statement, $operations, &$errors){
     $statementLength = count($statement);
 
     for($i = 0; $i < $statementLength; ++$i){
+        if($statement[$i] == '.') continue;
+
         // Проверка на символы - арифметические и цифры
         if(!in_array($statement[$i], $operations) && !preg_match('~[0-9]+~', $statement[$i])){
             $errors[] = 'Ошибка! Обнаружены недопустимые символы';
@@ -37,7 +39,6 @@ function validateSequentialOperators($statement, $operations, &$errors){
     if(in_array($statement[0], $operations) || in_array(end($statement), $operations))
         $errors[] = 'Ошибка! Арифметические символы не могут располагаться в начале или конце строки';
 
-    
     for($i = 0; $i < $statementLength; $i++){
         if(in_array($statement[$i], $operations) && in_array($statement[$i+1], $operations)){ // Если следующий символ после найденного арифметического также арифметический - выбрасываем ошибку 
             $errors[] = 'Ошибка! Обнаружен повтор арифметических символов';
@@ -52,11 +53,11 @@ function validateDotPositions($statement, $operations, &$errors){
     if(substr($statement, 0, 1) == '.' || substr($statement, -1) == '.') 
         $errors[] = "Ошибка! Символ '.' не может располагаться в начале или конце строки";
 
+    // Проверка - есть ли между двумя точками в строке арифметический символ
     $statement = str_split($statement);
     $dotPositions = array_keys($statement, '.'); // Находим все позиции символа '.'
     $lastElement = end($dotPositions);
 
-    // Проверка - есть ли между двумя точками в строке арифметический символ
     $flag = true;
     foreach($dotPositions as $key => $value){ // Цикл перебора позиций символа '.' в строке
         // Если не последний элемент - находим длину интервала между текущей и следующей точкой
@@ -72,4 +73,14 @@ function validateDotPositions($statement, $operations, &$errors){
     }
 
     if($flag === false) $errors[] = 'Ошибка! Неверная запись дробных чисел';
+
+    // Проверка на следование точки и арифметического символа друг за другом
+    foreach($statement as $key => $value){
+        if(in_array($value, $operations)){
+            if($statement[$key+1] == '.' || $statement[$key-1] == '.'){
+                $errors[] = 'Ошибка! Обнаружено следование точки за арифметическим символом';
+                break;
+            } 
+        }
+    }
 }
