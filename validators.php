@@ -67,12 +67,10 @@ function validateDotPositions($statement, $operations, &$errors){
         // Выбираем срез массива выражения от текущей точки до следующей
         $interval = array_slice($statement, $value, $intervalSize);  
         if(empty(array_intersect($operations, $interval))){ // Если в интервале нет арифметических символов - ошибка
-            $flag = false;
+            $errors[] = 'Ошибка! Неверная запись дробных чисел';
             break;
         }
     }
-
-    if($flag === false) $errors[] = 'Ошибка! Неверная запись дробных чисел';
 
     // Проверка на следование точки и арифметического символа друг за другом
     foreach($statement as $key => $value){
