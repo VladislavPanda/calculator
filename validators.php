@@ -48,7 +48,28 @@ function validateSequentialOperators($statement, $operations, &$errors){
 
 // Функция проверки корректности расположения символа '.'
 function validateDotPositions($statement, $operations, &$errors){
+    // Проверка - точки не могут располагаться в начале или конце строки
     if(substr($statement, 0, 1) == '.' || substr($statement, -1) == '.') 
         $errors[] = "Ошибка! Символ '.' не может располагаться в начале или конце строки";
 
+    $statement = str_split($statement);
+    $dotPositions = array_keys($statement, '.'); // Находим все позиции символа '.'
+    $lastElement = end($dotPositions);
+
+    // Проверка - есть ли между двумя точками в строке арифметический символ
+    $flag = true;
+    foreach($dotPositions as $key => $value){ // Цикл перебора позиций символа '.' в строке
+        // Если не последний элемент - находим длину интервала между текущей и следующей точкой
+        if($value != $lastElement) $intervalSize = $dotPositions[$key+1] - $value;
+        else break;
+        
+        // Выбираем срез массива выражения от текущей точки до следующей
+        $interval = array_slice($statement, $value, $intervalSize);  
+        if(empty(array_intersect($operations, $interval))){ // Если в интервале нет арифметических символов - ошибка
+            $flag = false;
+            break;
+        }
+    }
+
+    if($flag === false) $errors[] = 'Ошибка! Неверная запись дробных чисел';
 }

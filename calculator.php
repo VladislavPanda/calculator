@@ -13,7 +13,6 @@ validateSequentialOperators($statement, $operations, $errors); // Функция
 validateDotPositions($statement, $operations, $errors); // Функция проверки корректности расположения символа '.'
 if(!preg_match('~[0-9]+~', $statement)) $errors[] = 'Ошибка! В строке отсутствуют цифры'; // Проверка присутствия в строке выражения чисел
 
-
 print_r($errors);
 
 // $errors = array_unique($errors);
